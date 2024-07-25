@@ -1,0 +1,17 @@
+FROM debian
+
+# Update package list and install cowsay, fortune, and bash
+RUN apt-get update && \
+   apt-get install -y cowsay fortune bash netcat-openbsd
+# Ensure /usr/games is in the PATH
+ENV PATH="/usr/games:${PATH}"
+
+# Copy all files from the current directory to the container
+COPY . .
+
+# Make sure new.sh is executable
+RUN chmod +x new.sh
+EXPOSE 4499
+
+# Set the entry point to the script
+ENTRYPOINT ["./new.sh"]
