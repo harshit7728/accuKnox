@@ -33,6 +33,16 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: confiure permission to docker 
         run: sudo chown $USER /var/run/docker.sock
+      - name: download kubernets minikube  
+        run: curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+                  sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
+      - name: start minikube
+        run: minikube start
+      - name: kubectl apply -f .
+
+
+      - name: get deployment
+        run: curl cowsay.devopsharshit.wuaze.com
 
           echo Add other actions to build,
           echo test, and deploy your project.
