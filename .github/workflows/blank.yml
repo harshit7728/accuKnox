@@ -27,6 +27,9 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: install docker 
+        run: sudo apt-get update
+        
+      - name: install docker 
         run: sudo apt-get install docker.io
         
 
