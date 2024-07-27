@@ -41,7 +41,14 @@ jobs:
                   sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
       - name: start minikube
         run: minikube start
-      - name: kubectl apply -f .
+      - name: kubectl install
+        run: sudo snap install kubectl --classic
+      - name: enable ingress
+        run: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
+
+
+      - name: kubectl apply
+        run: kubectl apply -f .
 
 
       - name: get deployment
