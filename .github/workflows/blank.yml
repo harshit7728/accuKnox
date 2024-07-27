@@ -1,5 +1,3 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
 
 # Controls when the workflow will run
@@ -26,33 +24,44 @@ jobs:
       - uses: actions/checkout@v3
 
       # Runs a single command using the runners shell
-      - name: install docker 
-        run: sudo apt-get update
-        
-      - name: install docker 
-        run: sudo apt-get install docker
-        
+      - name: Install Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker.io
 
-      # Runs a set of commands using the runners shell
-      - name: confiure permission to docker 
+      # Configure permission to Docker
+      - name: Configure Docker permissions
         run: sudo chown $USER /var/run/docker.sock
-      - name: download kubernets minikube  
-        run: curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-                  sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
-      - name: start minikube
+
+      # Download and install Kubernetes Minikube
+      - name: Install Minikube
+        run: |
+          curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+          sudo install minikube-linux-amd64 /usr/local/bin/minikube
+          rm minikube-linux-amd64
+
+      # Start Minikube
+      - name: Start Minikube
         run: minikube start
-      - name: kubectl install
+
+      # Install kubectl
+      - name: Install kubectl
         run: sudo snap install kubectl --classic
-      - name: enable ingress
+
+      # Enable Ingress
+      - name: Enable Ingress
         run: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
 
-
-      - name: kubectl apply
+      # Apply Kubernetes deployment
+      - name: Apply Kubernetes Deployment
         run: kubectl apply -f .
 
+      # Get deployment
+      - name: Get Deployment
+        run: |
+          curl cowsay.devopsharshit.wuaze.com
 
-      - name: get deployment
-        run: curl cowsay.devopsharshit.wuaze.com
-
+      - name: Add other actions
+        run: |
           echo Add other actions to build,
           echo test, and deploy your project.
