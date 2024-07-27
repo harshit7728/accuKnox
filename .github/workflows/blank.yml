@@ -30,7 +30,7 @@ jobs:
         run: sudo apt-get update
         
       - name: install docker 
-        run: sudo apt-get install docker.io
+        run: sudo apt-get install docker
         
 
       # Runs a set of commands using the runners shell
