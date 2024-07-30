@@ -76,10 +76,7 @@ jobs:
 
       # Get Deployment
       - name: Get Deployment
-        run: |
-          sleep 60 # wait for the ingress to be ready
-          curl $(minikube ip)/cowsay
-
+        run: curl cowsay.devopsharshit.wuaze.com
       - name: Add other actions
         run: |
           echo Add other actions to build,
