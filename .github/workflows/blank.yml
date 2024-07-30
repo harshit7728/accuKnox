@@ -75,13 +75,13 @@ jobs:
 
       # Apply Kubernetes deployment
       - name: Apply Kubernetes Deployment
-        run: kubectl apply -f deployment.yaml 
+        run: kubectl apply -f cowsay/deployment.yaml 
         
       - name: Apply Kubernetes Deployment
-        run: kubectl apply -f service.yaml 
+        run: kubectl apply -f cowsay/service.yaml 
         
       - name: Apply Kubernetes Deployment
-        run: kubectl apply -f cow-ingress.yaml
+        run: kubectl apply -f cowsay/cow-ingress.yaml
 
       # Get deployment
       - name: Get Deployment
