@@ -67,7 +67,10 @@ jobs:
 
       # Install kubectl
       - name: Install kubectl
-        run: sudo snap install kubectl --classic
+        run: |
+          curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x ./kubectl
+          sudo mv ./kubectl /usr/local/bin/kubectl
 
       # Enable Ingress
       - name: Enable Ingress
@@ -80,9 +83,28 @@ jobs:
       - name: Apply Kubernetes Deployment
         run: kubectl apply -f cowsay/service.yaml 
         
-      - name: Apply Kubernetes Deployment
-        run: kubectl apply -f cowsay/cow-ingress.yaml
+      - name: Install kubectl apply -f cowsay/cow-ingress.yaml
+        run: |
+          kubectl apply -f cowsay/cow-ingress.yaml || true
 
+      - name: Debug - Check NGINX Ingress Controller
+        run: |
+          kubectl get pods -n ingress-nginx
+          kubectl describe pods -n ingress-nginx
+          kubectl logs -l app.kubernetes.io/name=ingress-nginx -n ingress-nginx
+
+      - name: Debug - Check Webhook Service
+        run: |
+          kubectl get svc -n ingress-nginx
+          kubectl describe svc ingress-nginx-controller-admission -n ingress-nginx
+
+      - name: Increase Webhook Timeout
+        run: |
+          kubectl patch validatingwebhookconfigurations ingress-nginx-admission --type='json' -p='[{"op": "replace", "path": "/webhooks/0/timeoutSeconds", "value": 30}]'
+
+      - name: Retry kubectl apply
+        run: |
+          kubectl apply -f cowsay/cow-ingress.yaml
       # Get deployment
       - name: Get Deployment
         run: |
