@@ -1,26 +1,17 @@
 name: CI
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
       # Install Docker
@@ -42,7 +33,9 @@ jobs:
 
       # Configure permission to Docker
       - name: Configure Docker permissions
-        run: sudo chown $USER /var/run/docker.sock
+        run: |
+          sudo usermod -aG docker $USER
+          newgrp docker
 
       # Verify Docker installation
       - name: Verify Docker installation
@@ -51,8 +44,6 @@ jobs:
       # Run a Docker command to verify it works
       - name: Verify Docker access
         run: docker ps
-
-
 
       # Download and install Kubernetes Minikube
       - name: Install Minikube
@@ -63,7 +54,8 @@ jobs:
 
       # Start Minikube
       - name: Start Minikube
-        run: minikube start
+        run: |
+          sudo minikube start --driver=docker
 
       # Install kubectl
       - name: Install kubectl
@@ -77,15 +69,17 @@ jobs:
       - name: Apply Kubernetes Deployment
         run: kubectl apply -f cowsay/deployment.yaml 
         
-      - name: Apply Kubernetes service
+      - name: Apply Kubernetes Service
         run: kubectl apply -f cowsay/service.yaml 
         
-      - name: Install kubectl apply ingress
-        run:  kubectl apply -f cowsay/cow-ingress.yaml 
-      # Get deployment
+      - name: Apply Kubernetes Ingress
+        run: kubectl apply -f cowsay/cow-ingress.yaml 
+
+      # Get Deployment
       - name: Get Deployment
         run: |
-          curl cowsay.devopsharshit.wuaze.com
+          sleep 60 # wait for the ingress to be ready
+          curl $(minikube ip)/cowsay
 
       - name: Add other actions
         run: |
