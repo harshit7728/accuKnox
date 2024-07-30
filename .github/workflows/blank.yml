@@ -31,7 +31,7 @@ jobs:
 
       # Configure permission to Docker
       - name: Configure Docker permissions
-        run: sudo chown $USER /var/run/docker.sock
+        run: sudo chown $root /var/run/docker.sock
 
       # Download and install Kubernetes Minikube
       - name: Install Minikube
