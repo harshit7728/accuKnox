@@ -55,15 +55,15 @@ jobs:
       # Start Minikube
       - name: Start Minikube
         run: |
-          sudo minikube start --driver=docker --force
+          sudo minikube start --driver=docker --force --addons=ingress
+
 
       # Install kubectl
       - name: Install kubectl
         run: sudo snap install kubectl --classic
 
       # Enable Ingress
-      - name: Enable Ingress
-        run: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
+      
 
       # Apply Kubernetes deployment
       - name: Apply Kubernetes Deployment
