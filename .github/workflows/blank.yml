@@ -23,7 +23,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
+      # Install Docker
       - name: Install Docker
         run: |
           sudo apt-get update
@@ -31,7 +31,16 @@ jobs:
 
       # Configure permission to Docker
       - name: Configure Docker permissions
-        run: sudo chown $root /var/run/docker.sock
+        run: sudo chown $USER /var/run/docker.sock
+
+      # Verify Docker installation
+      - name: Verify Docker installation
+        run: docker --version
+      
+      # Run a Docker command to verify it works
+      - name: Verify Docker access
+        run: docker ps
+
 
       # Download and install Kubernetes Minikube
       - name: Install Minikube
