@@ -76,7 +76,10 @@ jobs:
 
       # Get Deployment
       - name: Get Deployment
-        run: curl cowsay.devopsharshit.wuaze.com
+        run: echo "192.168.49.2  cowsay.devopsharshit.wuaze.com " | sudo tee -a /etc/hosts
+      - name: Get Deployment
+        run: curl cowsay.devopsharshit.wuaze.com 
+
       - name: Add other actions
         run: |
           echo Add other actions to build,
